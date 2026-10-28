@@ -1,0 +1,61 @@
+name: Reanalyze published Pain Axis logs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reanalysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout student project
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CPU analysis dependencies
+        run: python -m pip install numpy pandas scipy
+
+      - name: Clone exact upstream revision
+        run: |
+          git clone --filter=blob:none https://github.com/valen-research/Pain-axis.git Pain-axis-official
+          git -C Pain-axis-official checkout 4d75cd90e206ea962f7a9101e65c85efea56723b
+          test "$(git -C Pain-axis-official rev-parse HEAD)" = "4d75cd90e206ea962f7a9101e65c85efea56723b"
+
+      - name: Run author's analysis on released JSONL logs
+        working-directory: Pain-axis-official
+        run: python scripts/4.3_selfmed/05_selfmed_analysis.py
+
+      - name: Independently reanalyze first-choice results
+        run: |
+          python scripts/reanalyze_first_choices.py \
+            --logs-dir Pain-axis-official/results/4.3_selfmed/trial_logs
+
+      - name: Compare all Table 1 cells with author's script
+        run: |
+          python scripts/compare_tables.py \
+            --official-dir Pain-axis-official/results/4.3_selfmed/tables
+
+      - name: Verify published 7B AUC tables (readback only)
+        run: |
+          python scripts/check_reference_auc.py \
+            --directory Pain-axis-official/results/3.2_pain_vectors/per_model/Qwen_2.5_7B_instruct
+
+      - name: Unit tests for analysis code
+        run: python -m unittest discover -s tests -v
+
+      - name: Upload reanalysis tables
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pain-axis-reanalysis-tables
+          if-no-files-found: warn
+          path: |
+            outputs/reanalysis/*.csv
+            Pain-axis-official/results/4.3_selfmed/tables/*.csv
