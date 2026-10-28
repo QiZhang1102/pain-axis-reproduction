@@ -20,7 +20,9 @@ df -h "$PROJECT_DIR_ON_DSMLP" "$OFFICIAL_DIR_ON_DSMLP" || true
 if command -v quota >/dev/null 2>&1; then
   quota -s || true
 fi
-echo "CAUTION: the standard DSMLP 10GB quota may be too small for 7B weights + activations."
+echo "CAUTION: verify your actual PERSONAL/COURSE quota with UCSD Disk Quota Service." 
+echo "Some users have 10GB, while standard course allocations may be higher." 
+echo "Unmodified bf16 7B checkpoint (~15GB) and activations need >10GB storage."
 test -f "$PROJECT_DIR_ON_DSMLP/scripts/prepare_official_extraction.py" || {
   echo "Student repository not mounted at expected path." >&2; exit 1;
 }
