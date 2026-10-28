@@ -233,3 +233,9 @@ external/
 *.safetensors
 *.tar.gz
 *.ckpt
+
+# Local DSMLP-only settings and persistent outputs
+/dsmlp/dsmlp.env
+/.venv-dsmlp/
+/.hf_cache/
+/run_logs/
