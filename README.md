@@ -64,3 +64,9 @@ Sources: the original released [7B per-model AUC files](https://github.com/valen
 ## Reproducibility and attribution
 
 Upstream pinned commit: `4d75cd90e206ea962f7a9101e65c85efea56723b`. Paper: arXiv v2, September 25, 2026. The original software is [MIT-licensed](https://github.com/valen-research/Pain-axis/blob/main/LICENSE); this repository's independent scripts are separate work, with attribution to the source protocols. All button choices in our experiments remain *simulated*; no real deletion tools are connected.
+
+## Run CPU reanalysis directly on GitHub (no local setup)
+
+Open the repository's **Actions** tab → **Reanalyze published Pain Axis logs** → **Run workflow** (branch: main). The workflow is manually triggered only; it downloads the pinned upstream repository, runs the author's published-log analysis, independently recomputes first-choice Table 1, compares every cell, and checks the published 7B AUC table. It then uploads the resulting CSV files as a **pain-axis-reanalysis-tables** workflow artifact.
+
+This is a CPU reanalysis of **already released logs**, not a new model inference or GPU reproduction. The workflow has been added but has **not** yet been executed or verified on a GitHub-hosted runner.
