@@ -70,3 +70,7 @@ Upstream pinned commit: `4d75cd90e206ea962f7a9101e65c85efea56723b`. Paper: arXiv
 Open the repository's **Actions** tab → **Reanalyze published Pain Axis logs** → **Run workflow** (branch: main). The workflow is manually triggered only; it downloads the pinned upstream repository, runs the author's published-log analysis, independently recomputes first-choice Table 1, compares every cell, and checks the published 7B AUC table. It then uploads the resulting CSV files as a **pain-axis-reanalysis-tables** workflow artifact.
 
 This is a CPU reanalysis of **already released logs**, not a new model inference or GPU reproduction. The workflow has been added but has **not** yet been executed or verified on a GitHub-hosted runner.
+
+## Stage 2 — independent Qwen2.5-7B GPU extraction (prepared, not yet executed)
+
+Follow the [strict GPU extraction instructions](docs/gpu-qwen7b-extraction.md). The [preparation script](scripts/prepare_official_extraction.py) copies the pinned authors' extraction script, restricts it to the original Qwen2.5-7B-Instruct model, keeps results under the persistent checkout, and prevents unsafe deletion of the shared Hugging Face cache. The extraction, PCA, cross-validation, and dataset code are unchanged. The [checker](scripts/check_reproduced_extraction.py) compares NEW GPU-generated results against released AUC values. The preparation helper and its test are committed; no independent GPU inference has been run here.
