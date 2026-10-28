@@ -1,0 +1,16 @@
+# DSMLP SciPy-ML image supplies CUDA-matched PyTorch.
+# Do not directly install the author's unpinned 'torch' requirement here.
+# These are the remaining dependencies needed by the original extraction.
+# Dependency resolution can still alter torch: the job aborts if CUDA breaks.
+transformers
+transformer_lens
+peft
+huggingface_hub
+safetensors
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+tqdm
+requests
