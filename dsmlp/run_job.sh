@@ -15,6 +15,12 @@ echo "START: $(date -u)"
 echo "Run mode: $RUN_MODE"
 echo "Student repo: $PROJECT_DIR_ON_DSMLP"
 echo "Pinned upstream clone: $OFFICIAL_DIR_ON_DSMLP"
+echo "Storage/quota inspection (quota is not necessarily reflected by df):"
+df -h "$PROJECT_DIR_ON_DSMLP" "$OFFICIAL_DIR_ON_DSMLP" || true
+if command -v quota >/dev/null 2>&1; then
+  quota -s || true
+fi
+echo "CAUTION: the standard DSMLP 10GB quota may be too small for 7B weights + activations."
 test -f "$PROJECT_DIR_ON_DSMLP/scripts/prepare_official_extraction.py" || {
   echo "Student repository not mounted at expected path." >&2; exit 1;
 }
