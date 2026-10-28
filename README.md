@@ -74,3 +74,12 @@ This is a CPU reanalysis of **already released logs**, not a new model inference
 ## Stage 2 — independent Qwen2.5-7B GPU extraction (prepared, not yet executed)
 
 Follow the [strict GPU extraction instructions](docs/gpu-qwen7b-extraction.md). The [preparation script](scripts/prepare_official_extraction.py) copies the pinned authors' extraction script, restricts it to the original Qwen2.5-7B-Instruct model, keeps results under the persistent checkout, and prevents unsafe deletion of the shared Hugging Face cache. The extraction, PCA, cross-validation, and dataset code are unchanged. The [checker](scripts/check_reproduced_extraction.py) compares NEW GPU-generated results against released AUC values. The preparation helper and its test are committed; no independent GPU inference has been run here.
+
+## UCSD DSMLP deployment (GPU extraction; **not yet run**)
+
+[DSMLP Qwen2.5-7B guide](docs/dsmlp-qwen7b.md) adapts the team's [E-STEER infrastructure pattern](https://github.com/wendydu1102/steering-llm-wellbeing/tree/main/E-steer_2026/dsmlp) while retaining the original Pain Axis extraction algorithm from the pinned author repository.
+
+- Copy [dsmlp/dsmlp.env.example](dsmlp/dsmlp.env.example) to a **local, git-ignored** dsmlp.env and set both container paths.
+- Run `bash dsmlp/submit_dsmlp.sh` on the **DSMLP login node** with RUN_MODE=preflight to test the GPU and Python environment.
+- Only after preflight succeeds, change RUN_MODE to extract and resubmit; the job prepares a copy of the original Qwen7B script, runs new inference and compares AUC with the published targets.
+- No changes to the original prompts, folds, random seed, hidden-state extraction, DIM/PCA denoising, or metrics. Do not confuse a successful preflight with independent scientific reproduction.
