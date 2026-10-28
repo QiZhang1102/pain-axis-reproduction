@@ -47,7 +47,7 @@ Replace FILL_IN_USER in **both** PROJECT_DIR_ON_DSMLP and OFFICIAL_DIR_ON_DSMLP.
 
 The default GPU_CLASS=large (reported as ~48GB in the team sample), CPUS=8, MEM_GB=64, GPUS=1 are **resource requests to try**, not guaranteed allocations or a verified minimum. Your available class, quota, RAM, and maximum duration depend on current DSMLP policy. Verify those before submitting; use extra-large only if eligible and needed. Unlike the E-STEER 0.5B job, this 7B all-layer extraction is computationally demanding.
 
-**Storage warning:** UCSD's current DSMLP information lists **10 GB of storage** as a standard onboarded allocation. That is too small for an unquantized 7B model download (roughly 15 GB in bf16) plus a full activation cache and virtual environment. Before trying to download model weights, check your real home/workspace quota and arrange a larger persistent workspace with the course/DSMLP team. The 64 GB RAM request is not storage capacity.
+**Storage check (required before extraction):** UCSD publishes different defaults for different access routes: 10 GB for some independently onboarded students, while a standard instructional course configuration document lists 100 GB of student disk quota. These are not guarantees for this account. Personal `/private` and course workspace are separate quota pools. Inspect [Disk Quota Service](https://datahub.ucsd.edu/services/disk-quota-service), and choose a mapped persistent path with sufficient **allocated** quota. An original bf16 7B checkpoint (~15 GB) plus activations cannot be kept within 10 GB. The 64 GB MEM_GB request is **RAM**, not storage. Do not replace the original checkpoint with 4-bit/0.5B merely to fit 10 GB and still call the experiment strict reproduction.
 
 On the DSMLP login node you can inspect `quota -s` (if supported), `df -h ~`, and `du -sh ~`; filesystem-free space is **not** the same as your personal quota. Check the allocated workspace with the course staff if unclear.
 
@@ -66,9 +66,11 @@ The submit script queues a batch job using the same launch-scipy-ml.sh -B patter
 
 Job logs persist in pain-axis-reproduction/run_logs/ and include the exact pip freeze and GPU name. Review the logs and check that the job exits with code 0 before proceeding. If package installation changes/invalidates CUDA PyTorch or TransformerLens is incompatible, stop and fix the software environment without changing the original scientific methods.
 
-UCSD's official support article confirms `launch-scipy-ml.sh`, the `-B --` batch pattern, and the usual 8 CPU / 64 GB RAM / 1 GPU limits. Its student-project information lists a standard 10 GB disk allocation; storage and GPU-class availability must be checked for your own account:
+UCSD official sources describe the launch command/batch-job pattern and distinct storage arrangements. Always check the quota actually applied to your own course/project account and current GPU-class availability:
 - https://support.ucsd.edu/services?id=kb_article_view&sysparm_article=KB0032273
-- https://edtech.ucsd.edu/instructional-tools/dsmlp-datahub/index.html
+- https://edtech.ucsd.edu/instructional-tools/dsmlp-datahub/index.html (independent-study 10 GB onboarding example)
+- https://support.ucsd.edu/its?id=kb_article_view&sysparm_article=KB0030587 (standard course configuration lists 100 GB)
+- https://support.ucsd.edu/its?id=kb_article&sysparm_article=KB0030470 (separate personal and workspace quota pools)
 - https://dsmlp-docs.ucsd.edu/gpu-access/gpu-classes/ (class options; verify current availability)
 
 We have not tested a job submission against your actual DSMLP account.
