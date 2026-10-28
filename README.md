@@ -83,3 +83,4 @@ Follow the [strict GPU extraction instructions](docs/gpu-qwen7b-extraction.md). 
 - Run `bash dsmlp/submit_dsmlp.sh` on the **DSMLP login node** with RUN_MODE=preflight to test the GPU and Python environment.
 - Only after preflight succeeds, change RUN_MODE to extract and resubmit; the job prepares a copy of the original Qwen7B script, runs new inference and compares AUC with the published targets.
 - No changes to the original prompts, folds, random seed, hidden-state extraction, DIM/PCA denoising, or metrics. Do not confuse a successful preflight with independent scientific reproduction.
+- **Quota warning:** UCSD lists a standard 10 GB DSMLP disk allocation. That is insufficient for a roughly 15 GB bf16 7B checkpoint plus activation caches; confirm a sufficiently large persistent workspace with DSMLP/course staff before extracting.
