@@ -218,3 +218,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Pain Axis reproduction: local model weights, experiment artifacts and secrets
+.venv/
+.env
+.env.*
+!.env.example
+outputs/
+Pain-axis-official/
+external/
+*.jsonl
+*.pt
+*.pth
+*.safetensors
+*.tar.gz
+*.ckpt
